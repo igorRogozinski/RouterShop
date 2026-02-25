@@ -23,9 +23,9 @@ namespace RouterShop.Services.Abstractions
             return products.Select(p => _mapper.Map<ProductListDto>(p)).ToList();
         }
 
-        public Task<Product> GetById(int id)
+        public async Task<Product?> GetById(int id)
         {
-            return _productRepo.GetById(id);
+            return await _productRepo.GetById(id);
         }
 
         public async Task<ProductPaginated> GetProductsPaginated(int pageNumber, int pageSize)
