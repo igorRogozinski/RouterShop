@@ -7,7 +7,7 @@ namespace RouterShop.Repositories.Abstractions
 {
     public class ProductRepo : IProductRepo
     {
-        DBContext _context;
+        private readonly DBContext _context;
         public ProductRepo(DBContext context) 
         {
             _context = context;
@@ -25,6 +25,10 @@ namespace RouterShop.Repositories.Abstractions
         public async Task<List<Product>> GetPaginated(int pageNumber, int pageSize)
         {
             return await _context.Products.Skip((pageNumber-1)*pageSize).Take(pageSize).ToListAsync();
+        }
+        public async Task<int> GetProductCount()
+        {
+            return await _context.Products.CountAsync();
         }
     }
 }

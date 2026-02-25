@@ -1,44 +1,49 @@
-﻿using RouterShop.Models;
+﻿
+using AutoMapper;
+using RouterShop.Models;
 using RouterShop.Models.DTO;
 using RouterShop.Repositories.Abstractions;
+using RouterShop.Repositories.Interfaces;
 using RouterShop.Services.Interfaces;
 
 namespace RouterShop.Services.Abstractions
 {
     public class ProductService : IProductService
     {
-        ProductRepo _productRepo;
-        public ProductService(ProductRepo productRepo)
+        private readonly IMapper _mapper;
+        private readonly IProductRepo _productRepo;
+        public ProductService(IProductRepo productRepo, IMapper mapper)
         {
             _productRepo = productRepo;
+            _mapper = mapper;
         }
-        public Task<List<ProductDto>> GetAll()
+        public async Task<List<ProductListDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var products = await _productRepo.GetAll();
+            return products.Select(p => _mapper.Map<ProductListDto>(p)).ToList();
         }
 
         public Task<Product> GetById(int id)
         {
-            throw new NotImplementedException();
+            return _productRepo.GetById(id);
         }
 
         public async Task<ProductPaginated> GetProductsPaginated(int pageNumber, int pageSize)
         {
+            var totalProducts = await _productRepo.GetProductCount();
+            var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+            if (pageNumber > totalPages)
+            {
+                pageNumber = totalPages;
+            }
             var products = await _productRepo.GetPaginated(pageNumber,pageSize);
-            var paginatedProducts = products
-                .Select(p => new ProductDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price
-                })
-                .ToList();
+            var paginatedProducts = _mapper.Map<List<ProductListDto>>(products);
             return new ProductPaginated
             {
                 Products = paginatedProducts,
                 PageSize = pageSize,
                 CurrentPage = pageNumber,
-                TotalPages = (int)Math.Ceiling((double)products.Count / pageSize)
+                TotalPages = totalPages
             };
         }
     }
