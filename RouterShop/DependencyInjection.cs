@@ -10,11 +10,13 @@ namespace RouterShop
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
             return services;
         }
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             return services;
         }
     }
