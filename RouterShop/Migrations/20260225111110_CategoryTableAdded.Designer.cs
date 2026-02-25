@@ -11,7 +11,7 @@ using RouterShop.Context;
 namespace RouterShop.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20260225103006_CategoryTableAdded")]
+    [Migration("20260225111110_CategoryTableAdded")]
     partial class CategoryTableAdded
     {
         /// <inheritdoc />
@@ -34,6 +34,10 @@ namespace RouterShop.Migrations
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
