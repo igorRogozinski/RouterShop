@@ -24,7 +24,7 @@ namespace RouterShop.Repositories.Abstractions
 
         public async Task<List<Product>> GetPaginated(int pageNumber, int pageSize)
         {
-            return await _context.Products.Skip((pageNumber-1)*pageSize).Take(pageSize).ToListAsync();
+            return await _context.Products.Include(p=>p.ProductImages).Skip((pageNumber-1)*pageSize).Take(pageSize).ToListAsync();
         }
         public async Task<int> GetProductCount()
         {
