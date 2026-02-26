@@ -7,7 +7,9 @@ namespace RouterShop.Models.Mapper
     {
         public ProductProfile()
         {
-            CreateMap<Product, ProductListDto>();
+            CreateMap<Product, ProductListDto>().ForMember(
+                p=>p.ImageUrl, opt=>opt.MapFrom(src=>src.ProductImages.FirstOrDefault(pi=>pi.DefaultImage).ImageUrl)
+                );
         }
     }
 }
