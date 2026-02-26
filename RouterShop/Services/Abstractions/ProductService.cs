@@ -32,12 +32,17 @@ namespace RouterShop.Services.Abstractions
         {
             var totalProducts = await _productRepo.GetProductCount();
             var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
-            if (pageNumber > totalPages)
+            if(totalPages == 0)
+            {
+                pageNumber = 1;
+            }
+            else if (pageNumber > totalPages)
             {
                 pageNumber = totalPages;
             }
             var products = await _productRepo.GetPaginated(pageNumber,pageSize);
             var paginatedProducts = _mapper.Map<List<ProductListDto>>(products);
+
             return new ProductPaginated
             {
                 Products = paginatedProducts,
