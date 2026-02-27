@@ -28,27 +28,28 @@ namespace RouterShop.Services.Abstractions
             return await _productRepo.GetById(id);
         }
 
-        public async Task<ProductPaginated> GetProductsPaginated(int pageNumber, int pageSize)
+        public async Task<ProductPaginated> GetProductsPaginated(ProductFilterDto filter)
         {
             var totalProducts = await _productRepo.GetProductCount();
-            var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+            var totalPages = (int)Math.Ceiling((double)totalProducts / filter.PageSize);
             if(totalPages == 0)
             {
-                pageNumber = 1;
+                filter.PageNumber = 1;
             }
-            else if (pageNumber > totalPages)
+            else if (filter.PageNumber > totalPages)
             {
-                pageNumber = totalPages;
+                filter.PageNumber = totalPages;
             }
-            var products = await _productRepo.GetPaginated(pageNumber,pageSize);
+            var products = await _productRepo.GetPaginated(filter);
             var paginatedProducts = _mapper.Map<List<ProductListDto>>(products);
 
             return new ProductPaginated
             {
                 Products = paginatedProducts,
-                PageSize = pageSize,
-                CurrentPage = pageNumber,
-                TotalPages = totalPages
+                PageSize = filter.PageSize,
+                CurrentPage = filter.PageNumber,
+                TotalPages = totalPages,
+                CategoryId = filter.CategoryId
             };
         }
     }

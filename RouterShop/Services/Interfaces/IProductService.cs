@@ -7,6 +7,6 @@ namespace RouterShop.Services.Interfaces
     {
         public Task<List<ProductListDto>> GetAll();
         public Task<Product?> GetById(int id);
-        public Task<ProductPaginated> GetProductsPaginated(int pageNumber, int pageSize);
+        public Task<ProductPaginated> GetProductsPaginated(ProductFilterDto filter);
     }
 }

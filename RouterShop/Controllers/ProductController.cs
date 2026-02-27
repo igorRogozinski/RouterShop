@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RouterShop.Models.DTO;
 using RouterShop.Services.Interfaces;
 
 namespace RouterShop.Controllers
@@ -15,9 +16,9 @@ namespace RouterShop.Controllers
             _productService = productService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetProducts([FromQuery] int pageNumber = 1)
+        public async Task<IActionResult> GetProducts([FromQuery] ProductFilterDto filter)
         {
-            var products = await _productService.GetProductsPaginated(pageNumber, pageSize);
+            var products = await _productService.GetProductsPaginated(filter);
             return Ok(products);
         }
         [HttpGet("{id}")]
